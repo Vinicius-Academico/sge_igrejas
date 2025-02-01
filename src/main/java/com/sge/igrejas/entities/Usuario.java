@@ -1,20 +1,30 @@
-
 package com.sge.igrejas.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "usuario")
 public class Usuario {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "nome", unique = true, nullable = false, length = 50)
     private String nome;
-    private String senha;
+
+    @JsonIgnore
+    @Column(name = "password", nullable = false)
+    private String password;
 
     public Usuario() {
     }
 
-    public Usuario(Long id, String nome, String senha) {
+    public Usuario(Long id, String nome, String password) {
         this.id = id;
         this.nome = nome;
-        this.senha = senha;
+        this.password = password;
     }
 
     public Long getId() {
@@ -33,13 +43,11 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPassword(String password) {
+        this.password = password;
     }
-    
-    
 }

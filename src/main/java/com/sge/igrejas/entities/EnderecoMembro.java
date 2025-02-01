@@ -1,32 +1,48 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.sge.igrejas.entities;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
-/**
- *
- * @author Administrador
- */
+@Entity
+@Table(name = "endereco_membro") 
 public class EnderecoMembro {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "membro_id", nullable = false) 
     private Membro membro;
+
+    @Column(name = "rua", length = 100, nullable = false)
     private String rua;
+
+    @Column(name = "numero", length = 10)
     private String numero;
+
+    @Column(name = "bairro", length = 50, nullable = false)
     private String bairro;
+
+    @Column(name = "cidade", length = 50, nullable = false)
     private String cidade;
+
+    @Column(name = "estado", length = 2, nullable = false)
     private String estado;
+
+    @Column(name = "referencia", length = 150)
     private String referencia;
+
+    @Column(name = "criado_em", updatable = false)
     private LocalDateTime criadoEm;
+
+    @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 
     public EnderecoMembro() {
     }
 
-    public EnderecoMembro(Integer id, Membro membro, String rua, String numero, String bairro, String cidade, String estado, String referencia, LocalDateTime criadoEm, LocalDateTime atualizadoEm) {
+    public EnderecoMembro(Integer id, Membro membro, String rua, String numero, String bairro, String cidade, String estado, String referencia) {
         this.id = id;
         this.membro = membro;
         this.rua = rua;
@@ -35,8 +51,16 @@ public class EnderecoMembro {
         this.cidade = cidade;
         this.estado = estado;
         this.referencia = referencia;
-        this.criadoEm = criadoEm;
-        this.atualizadoEm = atualizadoEm;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.criadoEm = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.atualizadoEm = LocalDateTime.now();
     }
 
     public Integer getId() {
@@ -107,17 +131,7 @@ public class EnderecoMembro {
         return criadoEm;
     }
 
-    public void setCriadoEm(LocalDateTime criadoEm) {
-        this.criadoEm = criadoEm;
-    }
-
     public LocalDateTime getAtualizadoEm() {
         return atualizadoEm;
     }
-
-    public void setAtualizadoEm(LocalDateTime atualizadoEm) {
-        this.atualizadoEm = atualizadoEm;
-    }
-    
-
 }

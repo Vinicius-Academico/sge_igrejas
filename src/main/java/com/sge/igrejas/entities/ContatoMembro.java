@@ -1,24 +1,36 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.sge.igrejas.entities;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- *
- * @author Administrador
- */
+@Entity
+@Table(name = "contato_membro")  
 public class ContatoMembro {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "membro_id", nullable = false)
     private Membro membro;
+
+    @Column(name = "telefone_contato", length = 20)
     private String telefoneContato;
+
+    @Column(name = "telefone_whatsapp", length = 20)
     private String telefoneWhatsapp;
+
+    @Column(name = "email", length = 100)
     private String email;
+
+    @Column(name = "outro_contato", length = 100)
     private String outroContato;
+
+    @Column(name = "criado_em", updatable = false)
     private LocalDateTime criadoEm;
+
+    @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 
     public ContatoMembro() {
@@ -33,6 +45,16 @@ public class ContatoMembro {
         this.outroContato = outroContato;
         this.criadoEm = criadoEm;
         this.atualizadoEm = atualizadoEm;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.criadoEm = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.atualizadoEm = LocalDateTime.now();
     }
 
     public Integer getId() {
@@ -87,17 +109,7 @@ public class ContatoMembro {
         return criadoEm;
     }
 
-    public void setCriadoEm(LocalDateTime criadoEm) {
-        this.criadoEm = criadoEm;
-    }
-
     public LocalDateTime getAtualizadoEm() {
         return atualizadoEm;
     }
-
-    public void setAtualizadoEm(LocalDateTime atualizadoEm) {
-        this.atualizadoEm = atualizadoEm;
-    }
-    
-    
 }
