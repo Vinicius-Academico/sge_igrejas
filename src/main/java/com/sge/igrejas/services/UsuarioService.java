@@ -9,6 +9,7 @@ public class UsuarioService {
 
     private final PasswordEncoder passwordEncoder;
     private UsuarioDTO usuario;
+    
 
     public UsuarioService(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
