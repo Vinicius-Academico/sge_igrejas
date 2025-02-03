@@ -1,57 +1,47 @@
 package com.sge.igrejas.services;
 
 import com.sge.igrejas.dto.UsuarioDTO;
-import com.sge.igrejas.entities.Usuario;
-import com.sge.igrejas.mapper.UsuarioMapper;
-import com.sge.igrejas.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+    private UsuarioDTO usuario;
 
-    @Autowired
-    private UsuarioMapper usuarioMapper;
-
-    public List<UsuarioDTO> findAll() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        return usuarios.stream()
-                .map(usuarioMapper::toDTO)
-                .collect(Collectors.toList());
+    public UsuarioService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+        this.usuario = new UsuarioDTO(1L, "admin", this.passwordEncoder.encode("123456"));
     }
 
-    public UsuarioDTO findById(Long id) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
-        return usuarioMapper.toDTO(usuario);
+    public UsuarioDTO findByNome(String nome) {
+        if (usuario.getNome().equals(nome)) {
+            return usuario;
+        }
+        throw new RuntimeException("Usuário não encontrado!");
     }
 
     public UsuarioDTO save(UsuarioDTO usuarioDTO) {
-        Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
-        Usuario savedUsuario = usuarioRepository.save(usuario);
-        return usuarioMapper.toDTO(savedUsuario);
+        String senhaCriptografada = passwordEncoder.encode(usuarioDTO.getPassword());
+        usuario = new UsuarioDTO(usuarioDTO.getId(), usuarioDTO.getNome(), senhaCriptografada);
+        return usuario;
     }
 
-    public UsuarioDTO update(Long id, UsuarioDTO usuarioAtualizadoDTO) {
-        Usuario usuarioExistente = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
-
-        usuarioExistente.setNome(usuarioAtualizadoDTO.getNome());
-        usuarioExistente.setPassword(usuarioAtualizadoDTO.getNome());
-
-        Usuario updatedUsuario = usuarioRepository.save(usuarioExistente);
-        return usuarioMapper.toDTO(updatedUsuario);
+    public UsuarioDTO update(Long id, UsuarioDTO usuarioAtualizado) {
+        if (usuario.getId().equals(id)) {
+            usuario.setNome(usuarioAtualizado.getNome());
+            usuario.setPassword(usuarioAtualizado.getPassword());
+            return usuario;
+        }
+        throw new RuntimeException("Usuário não encontrado!");
     }
 
     public void delete(Long id) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
-        usuarioRepository.delete(usuario);
+        if (usuario.getId().equals(id)) {
+            usuario = null;
+        } else {
+            throw new RuntimeException("Usuário não encontrado!");
+        }
     }
 }

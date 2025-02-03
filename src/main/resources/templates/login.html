@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #4b6cb7, #182848);
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            color: #d9534f;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .show-error {
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .form-group {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Login</h1>
+
+        <!-- Exibe mensagem de erro, se houver -->
+        <div th:if="${error}" class="error-message show-error">
+            <p th:text="${error}"></p>
+        </div>
+
+        <form th:action="@{/auth/login}" method="post">
+            <div class="form-group">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" th:value="${usuario != null ? usuario.nome : ''}" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required autocomplete="off">
+            </div>
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+
+</body>
+</html>
