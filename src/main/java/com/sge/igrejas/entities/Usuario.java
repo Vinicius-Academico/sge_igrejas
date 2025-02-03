@@ -2,9 +2,19 @@ package com.sge.igrejas.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "usuario")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Usuario {
 
     @Id
@@ -17,37 +27,4 @@ public class Usuario {
     @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
-
-    public Usuario() {
-    }
-
-    public Usuario(Long id, String nome, String password) {
-        this.id = id;
-        this.nome = nome;
-        this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
